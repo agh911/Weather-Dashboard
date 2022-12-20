@@ -5,3 +5,12 @@
     --card-color: #90b4ce;
 }
 
+
+.weather-today {
+    border: 2px solid var(--background-color);
+
+}
+
+.forecast-days {
+    border: 2px solid var(--background-color);
+}
