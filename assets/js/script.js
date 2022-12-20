@@ -26,6 +26,7 @@ var iconURL = 'https://openweathermap.org/img/w/';
 // Grab needed elements
 var cityInput = $('#search-input');
 var searchBtn = $('#search-button');
+var clearBtn = $('#clear-btn');
 var locationHistory = $('#history');
 var today = $('#today');
 var displayDate = $(".current-day");
@@ -77,8 +78,60 @@ function cityInputSubmitted(city) {
     })
 }
 
+
+// Save locations to localStorage
+function getLocations() {
+  return JSON.parse(localStorage.getItem('locations')) || [];
+}
+
+function saveLocation(arr) {
+  localStorage.setItem('locations', JSON.stringify(arr));
+}
+
+function displayLocation() {
+  var locations = getLocations();
+
+  locationHistory.html('');
+
+  locations.forEach(function(location, index) {
+    locationHistory.append(`
+    <button class="col-lg-10 mb-2 prev-location-btn location-${index}">${location}</button>
+    `)
+  })
+}
+
+function addLocation(event) {
+  var addClick = event.type;
+
+  if (addClick === 'click') {
+    var locations = getLocations();
+    var locationText = cityInput.val();
+
+    // If there is no location input or the entered location is already saved to localStorage -> skip it
+    if(!locationText || locations.includes(locationText)) return;
+
+    locations.push(locationText);
+    saveLocation(locations);
+
+    cityInput.val('');
+
+    displayLocation();
+  }
+}
+
+// Clear localStorage
+function clearHistory(event) {
+  localStorage.clear();
+  // Remove injected HTML with previously saved locations
+  locationHistory.html('');
+}
+clearBtn.click(clearHistory);
+
+
 function init() {
   searchBtn.click(cityInputSubmitted);
+  searchBtn.click(addLocation);
+  displayLocation();
 
 }
 
