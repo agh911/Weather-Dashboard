@@ -35,13 +35,17 @@ var city = '';
 var currentDay = moment().format('D/M/YYYY');
 var forecastDay = moment();
 
-function cityInputSubmitted(city) {
+function getCity(event){
   event.preventDefault();
+  city = cityInput.val().trim();
+  cityInputSubmitted(city);
+}
+
+function cityInputSubmitted(cityName) {
   today.html('');
   daysForecast.html('');
 
-  city = cityInput.val().trim();
-    $.get(currentURL + `q=${city}`)
+    $.get(currentURL + `q=${cityName}`)
     .then(function(currentData) {
         // console.log(currentData);
         // Inject HTML code into #today section with the current day weather conditions 
@@ -77,7 +81,6 @@ function cityInputSubmitted(city) {
         });
     })
 }
-
 
 // Save locations to localStorage
 function getLocations() {
@@ -127,12 +130,10 @@ function clearHistory(event) {
 }
 clearBtn.click(clearHistory);
 
-
 function init() {
-  searchBtn.click(cityInputSubmitted);
+  searchBtn.click(getCity);
   searchBtn.click(addLocation);
   displayLocation();
-
 }
 
 init();
