@@ -130,10 +130,18 @@ function clearHistory(event) {
 }
 clearBtn.click(clearHistory);
 
+// Get forecast from displayed location history
+function getForecastFromHistory(event) {
+  previousLocation = event.target.innerText;
+  console.log(previousLocation);
+  cityInputSubmitted(previousLocation);
+}
+
 function init() {
   searchBtn.click(getCity);
   searchBtn.click(addLocation);
   displayLocation();
+  $('.prev-location-btn').click(getForecastFromHistory);
 }
 
 init();
