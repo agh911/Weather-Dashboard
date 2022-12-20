@@ -25,19 +25,21 @@ function getCity(event){
 
 function cityInputSubmitted(cityName) {
   today.html('');
+  $('.forecast-headline').html('');
   daysForecast.html('');
-
+  
     $.get(currentURL + `q=${cityName}`)
     .then(function(currentData) {
         // console.log(currentData);
         // Inject HTML code into #today section with the current day weather conditions 
         today.append(`
-         <div class="weather-today p-3">
+         <div class="weather-today p-3 mb-3">
             <h1>${currentData.name} ${currentDay} <img src="${iconURL + currentData.weather[0].icon}.png"></h1>
             <p>Temp: ${Math.round(currentData.main.temp)}ºC</p>
             <p>Wind: ${currentData.wind.speed} KPH</p>
             <p>Humidity: ${currentData.main.humidity}%</p>
           </div>
+          <h3 id="forecast-headline">5-Day Forecast:</h3>
         `)
 
         $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)
