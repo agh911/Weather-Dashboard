@@ -18,6 +18,7 @@ var currentDay = moment().format('D/M/YYYY');
 var forecastDay = moment();
 
 function getCity(event) {
+  // Prevent page from refreshing when clicking on the search button
   event.preventDefault();
   city = cityInput.val().trim();
   cityInputSubmitted(city);
@@ -27,13 +28,13 @@ function cityInputSubmitted(cityName) {
   today.html('');
   daysForecast.html('');
   
+  // If there is no city input then return an alert
   if (!cityName) {
     return alert('Please enter a location first.');
   }
 
   $.get(currentURL + `q=${cityName}`)
     .then(function (currentData) {
-      // console.log(currentData);
       // Inject HTML code into #today section with the current day weather conditions 
       today.append(`
          <div class="weather-today p-3 mb-3 pl-4">
@@ -47,14 +48,13 @@ function cityInputSubmitted(cityName) {
 
       $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)
         .then(function (forecastData) {
-          // console.log(forecastData);
           for (var forecastObj of forecastData.list) {
             if (forecastObj.dt_txt.includes("12:00:00")) {
               // Update forecast days 
               forecastDay.add(1, 'day');
               // Inject HTML code to display forecast cards
               daysForecast.append(`
-                <div class="forecast-days ml-3 mr-3 p-4">
+                <div class="forecast-days ml-3 mr-3 p-4 mb-4">
                 <p class="forecast-date"><b>${forecastDay.format('D/M/YYYY')}</b></p>
                 <img src="${iconURL + forecastObj.weather[0].icon}.png">
                 <p>Temp: ${Math.round(forecastObj.main.temp)}ºC</p>
@@ -80,9 +80,9 @@ function saveLocation(arr) {
 
 function displayLocation() {
   var locations = getLocations();
-
   locationHistory.html('');
 
+  // Display 'Freviously searched:' paragraph only if the locations array is not empty
   if(locations.length > 0) {
     locationHistory.append(`
     <p id="previous-search">Previously searched:</p>
