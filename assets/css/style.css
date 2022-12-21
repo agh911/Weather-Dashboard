@@ -1,16 +1,63 @@
 :root {
-    --background-color: #16161a;
+    --background-color: #16161A;
     --headers-color: #fffffe;
     --paragraph-color: #94a1b2;
-    --card-color: #90b4ce;
+    --cards-color:#303135;
+    --buttons-color: #2cb67d;
+    --card-stroke: linear-gradient(to right, rgba(255,255,254,1) 0%, rgba(255,255,254,0.5480786064425771) 100%);
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--headers-color)
+}
+
+.weather-header {
+    color: var(--headers-color) !important;
+    padding-left: 65px !important;
+}
+
+.weather-search {
+    background-color: #f6f6f6;
+    border: none;
+    border-radius: 5px 0 0 5px;
+}
+
+#search-button {
+    background-color: var(--buttons-color);
+    border-radius: 0 5px 5px 0;
+    border: none !important;
+}
+
+p#previous-search {
+    margin-bottom: 5px;
+}
+
+button {
+    border-radius: 5px;
+    border: none;
+}
+
+#clear-btn {
+    background-color: var(--buttons-color) !important;
+}
+
+#clear-btn, .prev-location-btn {
+    height: 36px !important;
+    width: 255px;
 }
 
 
-.weather-today {
-    border: 2px solid var(--background-color);
-
+.weather-today, .forecast-days {
+    background-color: var(--cards-color);
+    border: 1px solid rgba(255, 255, 254, .1);
+    border-radius: 10px;
 }
 
 .forecast-days {
-    border: 2px solid var(--background-color);
+    color: var(--forecast-text-color);
 }
