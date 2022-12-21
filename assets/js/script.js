@@ -17,7 +17,7 @@ var city = '';
 var currentDay = moment().format('D/M/YYYY');
 var forecastDay = moment();
 
-function getCity(event){
+function getCity(event) {
   event.preventDefault();
   city = cityInput.val().trim();
   cityInputSubmitted(city);
@@ -28,12 +28,16 @@ function cityInputSubmitted(cityName) {
   $('.forecast-headline').html('');
   daysForecast.html('');
   
-    $.get(currentURL + `q=${cityName}`)
-    .then(function(currentData) {
-        // console.log(currentData);
-        // Inject HTML code into #today section with the current day weather conditions 
-        today.append(`
-         <div class="weather-today p-3 mb-3">
+  if (!cityName) {
+    return alert('Please enter a location first.');
+  }
+
+  $.get(currentURL + `q=${cityName}`)
+    .then(function (currentData) {
+      // console.log(currentData);
+      // Inject HTML code into #today section with the current day weather conditions 
+      today.append(`
+         <div class="weather-today p-3 mb-3 pl-4">
             <h1>${currentData.name} ${currentDay} <img src="${iconURL + currentData.weather[0].icon}.png"></h1>
             <p>Temp: ${Math.round(currentData.main.temp)}ºC</p>
             <p>Wind: ${currentData.wind.speed} KPH</p>
@@ -42,8 +46,8 @@ function cityInputSubmitted(cityName) {
           <h3 id="forecast-headline">5-Day Forecast:</h3>
         `)
 
-        $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)
-        .then(function(forecastData) {
+      $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)
+        .then(function (forecastData) {
           // console.log(forecastData);
           for (var forecastObj of forecastData.list) {
             if (forecastObj.dt_txt.includes("12:00:00")) {
@@ -51,8 +55,8 @@ function cityInputSubmitted(cityName) {
               forecastDay.add(1, 'day');
               // Inject HTML code to display forecast cards
               daysForecast.append(`
-                <div class="forecast-days ml-3 p-4">
-                <p class="forecast-date">${forecastDay.format('D/M/YYYY')}</p>
+                <div class="forecast-days ml-3 mr-3 p-4">
+                <p class="forecast-date"><b>${forecastDay.format('D/M/YYYY')}</b></p>
                 <img src="${iconURL + forecastObj.weather[0].icon}.png">
                 <p>Temp: ${Math.round(forecastObj.main.temp)}ºC</p>
                 <p>Humidity: ${forecastObj.main.humidity}%</p>
@@ -80,9 +84,13 @@ function displayLocation() {
 
   locationHistory.html('');
 
-  locations.forEach(function(location, index) {
+  locationHistory.append(`
+  <p id="previous-search">Previously searched:</p>
+  `);
+
+  locations.forEach(function (location, index) {
     locationHistory.append(`
-    <button class="col-lg-10 mb-2 prev-location-btn location-${index}">${location}</button>
+    <button id="location-${index}" class="btn btn-outline-dark mb-2 prev-location-btn">${location}</button>
     `)
   })
 }
@@ -97,11 +105,12 @@ function addLocation(event) {
     locationText = locationText.charAt(0).toUpperCase() + locationText.slice(1);
 
     // If there is no location input or the entered location is already saved to localStorage -> skip it
-    if(!locationText || locations.includes(locationText)) return;
+    if (!locationText || locations.includes(locationText)) return;
 
     locations.push(locationText);
     saveLocation(locations);
 
+    $('#previous-search').val('');
     cityInput.val('');
 
     displayLocation();
@@ -117,7 +126,7 @@ function clearHistory(event) {
 clearBtn.click(clearHistory);
 
 // Get forecast from displayed location history
-$(document).on("click", ".prev-location-btn", function() {
+$(document).on("click", ".prev-location-btn", function () {
   var previousLocation = $(this).text();
   cityInputSubmitted(previousLocation);
 });
@@ -126,7 +135,6 @@ function init() {
   searchBtn.click(getCity);
   searchBtn.click(addLocation);
   displayLocation();
-  // $('.prev-location-btn').click(getForecastFromHistory);
 }
 
 init();
