@@ -25,7 +25,7 @@ function getCity(event) {
 
 function cityInputSubmitted(cityName) {
   today.html('');
-  $('.forecast-headline').html('');
+  locationHistory.html('');
   daysForecast.html('');
   
   if (!cityName) {
@@ -84,9 +84,11 @@ function displayLocation() {
 
   locationHistory.html('');
 
-  locationHistory.append(`
-  <p id="previous-search">Previously searched:</p>
-  `);
+  if(locations.length > 0) {
+    locationHistory.append(`
+    <p id="previous-search">Previously searched:</p>
+    `);
+  }
 
   locations.forEach(function (location, index) {
     locationHistory.append(`
