@@ -1,21 +1,3 @@
-/* 
-  When Page Loads:
-
-  1. Show user an input to allow them to search for a city
-    - show a message on the page to point them, or guide them, to the input.
-    - Once city has been inputted:
-      a. Show Current Forecast
-      b. Show 5 day Forecast
-      c. Add city name to search history
-        - Get previous searches from localStorage
-        - If inputted city has not been stored to search history in localStorage, push the city name
-        - Set the search history to localStorage
-  2. Show search history
-    - Pull search history from localStorage
-    - If search history is not empty, output each city to the search history display in the DOM
-*/
-
-
 // OpenWeather API
 var apiKey = 'f0ef0998304d20b1abdbebff004985e3';
 var baseURL = 'https://api.openweathermap.org/data/2.5/';
@@ -43,19 +25,21 @@ function getCity(event){
 
 function cityInputSubmitted(cityName) {
   today.html('');
+  $('.forecast-headline').html('');
   daysForecast.html('');
-
+  
     $.get(currentURL + `q=${cityName}`)
     .then(function(currentData) {
         // console.log(currentData);
         // Inject HTML code into #today section with the current day weather conditions 
         today.append(`
-         <div class="weather-today p-3">
+         <div class="weather-today p-3 mb-3">
             <h1>${currentData.name} ${currentDay} <img src="${iconURL + currentData.weather[0].icon}.png"></h1>
             <p>Temp: ${Math.round(currentData.main.temp)}ºC</p>
             <p>Wind: ${currentData.wind.speed} KPH</p>
             <p>Humidity: ${currentData.main.humidity}%</p>
           </div>
+          <h3 id="forecast-headline">5-Day Forecast:</h3>
         `)
 
         $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)
@@ -109,6 +93,8 @@ function addLocation(event) {
   if (addClick === 'click') {
     var locations = getLocations();
     var locationText = cityInput.val();
+    // Uppercase first letter of city name
+    locationText = locationText.charAt(0).toUpperCase() + locationText.slice(1);
 
     // If there is no location input or the entered location is already saved to localStorage -> skip it
     if(!locationText || locations.includes(locationText)) return;
@@ -131,17 +117,16 @@ function clearHistory(event) {
 clearBtn.click(clearHistory);
 
 // Get forecast from displayed location history
-function getForecastFromHistory(event) {
-  previousLocation = event.target.innerText;
-  console.log(previousLocation);
+$(document).on("click", ".prev-location-btn", function() {
+  var previousLocation = $(this).text();
   cityInputSubmitted(previousLocation);
-}
+});
 
 function init() {
   searchBtn.click(getCity);
   searchBtn.click(addLocation);
   displayLocation();
-  $('.prev-location-btn').click(getForecastFromHistory);
+  // $('.prev-location-btn').click(getForecastFromHistory);
 }
 
 init();
