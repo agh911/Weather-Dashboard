@@ -25,7 +25,7 @@ function getCity(event) {
 
 function cityInputSubmitted(cityName) {
   today.html('');
-  locationHistory.html('');
+    $('.forecast-headline').html('');
   daysForecast.html('');
   
   if (!cityName) {
