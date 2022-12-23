@@ -25,7 +25,7 @@ The weather dashboard needed to check for the following:
 
 The following animation shows the application's functionality:
 
-![weather-dashboard-app](assets/images/.gif)
+![weather-dashboard-app](assets/images/weather-dashboard.gif)
 ## Links
 
 * [Deployed application.](https://agh911.github.io/Weather-Dashboard/)
