@@ -21,17 +21,16 @@ function getCity(event) {
   // Prevent page from refreshing when clicking on the search button
   event.preventDefault();
   city = cityInput.val().trim();
+    // If there is no city input then return an alert
+    if (!city) {
+      return alert('Please enter a location first.');
+    }
   cityInputSubmitted(city);
 }
 
 function cityInputSubmitted(cityName) {
   today.html('');
   daysForecast.html('');
-  
-  // If there is no city input then return an alert
-  if (!cityName) {
-    return alert('Please enter a location first.');
-  }
 
   $.get(currentURL + `q=${cityName}`)
     .then(function (currentData) {
@@ -82,7 +81,7 @@ function displayLocation() {
   var locations = getLocations();
   locationHistory.html('');
 
-  // Display 'Freviously searched:' paragraph only if the locations array is not empty
+  // Display 'Previously searched:' paragraph only if the locations array is not empty
   if(locations.length > 0) {
     locationHistory.append(`
     <p id="previous-search">Previously searched:</p>
