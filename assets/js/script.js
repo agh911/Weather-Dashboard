@@ -21,10 +21,10 @@ function getCity(event) {
   // Prevent page from refreshing when clicking on the search button
   event.preventDefault();
   city = cityInput.val().trim();
-    // If there is no city input then return an alert
-    if (!city) {
-      return alert('Please enter a location first.');
-    }
+  // If there is no city input then return an alert
+  if (!city) {
+    return alert('Please enter a location first.');
+  }
   cityInputSubmitted(city);
 }
 
@@ -82,7 +82,7 @@ function displayLocation() {
   locationHistory.html('');
 
   // Display 'Previously searched:' paragraph only if the locations array is not empty
-  if(locations.length > 0) {
+  if (locations.length > 0) {
     locationHistory.append(`
     <p id="previous-search">Previously searched:</p>
     `);
@@ -100,7 +100,7 @@ function addLocation(event) {
 
   if (addClick === 'click') {
     var locations = getLocations();
-    var locationText = cityInput.val();
+    var locationText = cityInput.val().toLowerCase();
     // Uppercase first letter of city name
     locationText = locationText.charAt(0).toUpperCase() + locationText.slice(1);
 
